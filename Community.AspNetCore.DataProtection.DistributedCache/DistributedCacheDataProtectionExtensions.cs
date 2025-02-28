@@ -9,7 +9,7 @@ namespace Community.AspNetCore.DataProtection.DistributedCache
 {
     public static class DistributedCacheDataProtectionExtensions
     {
-        public static IDataProtectionBuilder PersistKeysToDistributedCache(this IDataProtectionBuilder builder)
+        public static IDataProtectionBuilder PersistKeysToDistributedCache(this IDataProtectionBuilder builder, string key = "DataProtectionKeys")
         {
             if (builder == null)
             {
@@ -18,10 +18,12 @@ namespace Community.AspNetCore.DataProtection.DistributedCache
 
             builder.Services.AddSingleton<IXmlRepository, DistributedCacheXmlRepository>();
 
+            builder.Services.AddSingleton(new DistributedCacheOptions(key));
+
             return builder;
         }
 
-        public static IDataProtectionBuilder PersistKeysToDistributedCache(this IDataProtectionBuilder builder, IDistributedCache distributedCache, string key)
+        public static IDataProtectionBuilder PersistKeysToDistributedCache(this IDataProtectionBuilder builder, IDistributedCache distributedCache, string key = "DataProtectionKeys")
         {
             if (builder == null)
             {

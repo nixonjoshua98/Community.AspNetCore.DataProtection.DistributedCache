@@ -7,15 +7,30 @@ using System.Xml.Linq;
 
 namespace Community.AspNetCore.DataProtection.DistributedCache
 {
+    internal sealed class DistributedCacheOptions
+    {
+        public DistributedCacheOptions(string cacheKey)
+        {
+            CacheKey = cacheKey;
+        }
+
+        public string CacheKey { get; set; } = default!;
+    }
+
     internal sealed class DistributedCacheXmlRepository : IXmlRepository
     {
         private readonly IDistributedCache _distributedCache;
         private readonly string _cacheKey;
 
-        public DistributedCacheXmlRepository(IDistributedCache distributedCache, string cacheKey = "DataProtection-Keys")
+        public DistributedCacheXmlRepository(IDistributedCache distributedCache, string cacheKey)
         {
             _distributedCache = distributedCache;
             _cacheKey = cacheKey;
+        }
+
+        public DistributedCacheXmlRepository(IDistributedCache distributedCache, DistributedCacheOptions options) : this(distributedCache, options.CacheKey)
+        {
+
         }
 
         public IReadOnlyCollection<XElement> GetAllElements()
